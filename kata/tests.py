@@ -16,7 +16,7 @@ class KataTestCase(TestCase):
         url='/api/portafolios'
         response =  self.client.get(url, format='json')
         portafolios = json.loads(response.content)
-        
+
         self.assertEqual(len(portafolios), 1)
 
     def testPaso2ListaPortafolios2Elementos(self):
@@ -35,6 +35,6 @@ class KataTestCase(TestCase):
     def testPaso3RegistrarUsuario(self):
         url = '/api/usuarios'
         response = self.client.post(url, json.dumps({"username":"utest", "password":"utest", "first_name":"utest", "last_name":"utest", "email":"utest@test.com"}), content_type='application/json')
-        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.status_code, 200)
         currentData = json.loads(response.content)
         self.assertEqual(currentData[0]['fields']['username'], "utest")
