@@ -16,4 +16,5 @@ class KataTestCase(TestCase):
         url='/api/portafolios'
         response =  self.client.get(url, format='json')
         portafolios = json.loads(response.content)
+        
         self.assertEqual(len(portafolios), 1)
