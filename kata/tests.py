@@ -1,7 +1,7 @@
 from django.test import TestCase
 import json
 from django.contrib.auth.models import User
-from .models import Portafolio
+from .models import Portafolio,Imagen
 
 # Create your tests here.
 class KataTestCase(TestCase):
@@ -38,3 +38,23 @@ class KataTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         currentData = json.loads(response.content)
         self.assertEqual(currentData[0]['fields']['username'], "utest")
+
+
+    def testPaso4ListarPortafolioImagenesPublicas(self):
+
+        userModel = User.objects.create_user(username="testImagen", password="testImagen", first_name="testImagen", last_name="testImagen",email="testImagen@test.com")
+
+        portafolio = Portafolio.objects.create(propietario=userModel)
+
+        imagenPublica1 = Imagen.objects.create(titulo="imagenPublica1",url="rutaImagenPublica1",type="jpg", isPublic= True, relatedPortafolio=portafolio)
+
+        imagenPublica2 = Imagen.objects.create(titulo="imagenPublica2", url="rutaImagenPublica2", type="jpg", isPublic= True, relatedPortafolio=portafolio)
+
+        imagenPrivada3 = Imagen.objects.create(titulo="imagenPrivada1", url="rutaImagenPrivada1", type="jpg", isPublic= False, relatedPortafolio=portafolio)
+
+        url = '/api/portafolios/' + str(portafolio.id) + '/publico'
+
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, 200)
+        imagenes = json.loads(response.content)
+        self.assertEqual(len(imagenes), 2)
