@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_list_or_404
+from django.shortcuts import render, get_list_or_404,get_object_or_404
 from django.http import HttpResponse,JsonResponse,Http404,HttpResponseForbidden
 from .models import Portafolio, Imagen
 from django.core import serializers
@@ -32,6 +32,26 @@ def usuarios(request):
         return HttpResponse(serializers.serialize('json',[userModel]))
     return Http404()
 
+def usuariosId(request,id):
+    if(request.method == 'PUT'):
+        usuario = get_object_or_404(User,id=id)
+        if usuario is not None:
+            jsonUser = json.loads(request.body)
+            firstName = jsonUser['first_name']
+            lastName = jsonUser['last_name']
+            email = jsonUser['email']
+
+            usuario.first_name = firstName
+            usuario.last_name = lastName
+            usuario.email = email
+
+            usuario.save()
+
+            return HttpResponse(serializers.serialize('json',[usuario]))
+    return Http404()
+
+        
+
 def portafoliosPublicos(request, id):
     imagenes = get_list_or_404(Imagen, Q(relatedPortafolio_id = id) & Q(isPublic = True))
     return HttpResponse(serializers.serialize('json',imagenes))
@@ -45,5 +65,7 @@ def usuariosLogin(request):
         if user is not None:
             login(request, user)
             return HttpResponse('')
+
+            
 
     return HttpResponseForbidden()

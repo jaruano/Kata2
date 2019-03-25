@@ -74,4 +74,4 @@ class KataTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
 
         currentData = json.loads(response.content)
-        self.assertEqual(currentData[0]['fields']['lastname'], "testnewlastname")
+        self.assertEqual(currentData[0]['fields']['last_name'], "utestnewlastname")
