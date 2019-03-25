@@ -63,7 +63,7 @@ class KataTestCase(TestCase):
         userModel = User.objects.create_user(username="testImagen", password="testImagen", first_name="testImagen", last_name="testImagen",email="testImagen@test.com")
         url = '/api/usuarios/login'
 
-        response = self.client.post(url, json.dumps({"username":"utest", "password":"utest"}), content_type='application/json')
+        response = self.client.post(url, json.dumps({"username":"testImagen", "password":"testImagen"}), content_type='application/json')
         self.assertEqual(response.status_code, 200)
 
 

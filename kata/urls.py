@@ -6,4 +6,5 @@ urlpatterns = [
     path('portafolios', views.getPortafolios, name='getPortafolios'),
     path('usuarios', views.usuarios, name='usuarios'),
     path('portafolios/<int:id>/publico', views.portafoliosPublicos, name='portafoliosPublicos'),
+    path('usuarios/login', views.usuariosLogin, name='usuariosLogin'),
 ]

@@ -1,10 +1,11 @@
 from django.shortcuts import render, get_list_or_404
-from django.http import HttpResponse,JsonResponse,Http404
+from django.http import HttpResponse,JsonResponse,Http404,HttpResponseForbidden
 from .models import Portafolio, Imagen
 from django.core import serializers
 import json
 from django.contrib.auth.models import User
 from django.db.models import Q
+from django.contrib.auth import authenticate,login
 
 def index(request):
     return HttpResponse("Hello, world. You're at the polls index.")
@@ -34,3 +35,15 @@ def usuarios(request):
 def portafoliosPublicos(request, id):
     imagenes = get_list_or_404(Imagen, Q(relatedPortafolio_id = id) & Q(isPublic = True))
     return HttpResponse(serializers.serialize('json',imagenes))
+
+def usuariosLogin(request):
+    if request.method == 'POST':
+        jsonUser = json.loads(request.body)
+        userName = jsonUser['username']
+        password = jsonUser['password']
+        user = authenticate(request, username=userName, password=password)
+        if user is not None:
+            login(request, user)
+            return HttpResponse('')
+
+    return HttpResponseForbidden()
