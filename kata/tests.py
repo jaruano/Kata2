@@ -66,4 +66,12 @@ class KataTestCase(TestCase):
         response = self.client.post(url, json.dumps({"username":"testImagen", "password":"testImagen"}), content_type='application/json')
         self.assertEqual(response.status_code, 200)
 
+    def testPaso6EdicionUsuario(self):
+        userModel = User.objects.create_user(username="utest", password="utest", first_name="utest", last_name="utest",email="utest@test.com")
+        url = '/api/usuarios/'+str(userModel.id)
 
+        response = self.client.put(url, json.dumps({"username":"utest", "password":"utest", "first_name":"utest", "last_name":"utestnewlastname", "email":"utest@test.com"}), content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
+        currentData = json.loads(response.content)
+        self.assertEqual(currentData[0]['fields']['lastname'], "testnewlastname")
